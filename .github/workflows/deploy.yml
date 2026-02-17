@@ -22,9 +22,10 @@ jobs:
     - name: Build and Push Image
       run: |
         IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/jaspal-strapi:${{ github.sha }}
-        docker build -t $IMAGE .
+        docker build -t $IMAGE ./strapi
         docker push $IMAGE
         echo "IMAGE_URL=$IMAGE" >> $GITHUB_ENV
+
 
     - name: Terraform Apply
       run: |
