@@ -1,19 +1,9 @@
-output "db_host" {
-  value = aws_db_instance.this.address
+output "ecs_cluster" {
+  value = module.ecs.cluster_name
 }
-
-output "db_port" {
-  value = aws_db_instance.this.port
+output "rds_endpoint" {
+  value = module.rds.db_host
 }
-
-output "db_name" {
-  value = aws_db_instance.this.db_name
-}
-
-output "ecs_cluster_name" {
-  value = aws_ecs_cluster.this.name
-}
-
-output "ecs_service_name" {
-  value = aws_ecs_service.this.name
+output "ecs_service" {
+  value = module.ecs_service.service_name
 }
