@@ -26,16 +26,7 @@ resource "aws_ecs_task_definition" "jaspal_task7_task" {
       ]
 
       environment = [
-  # Database
-        { name = "DATABASE_CLIENT", value = "postgres" },
-        { name = "DATABASE_HOST", value = var.db_host },
-        { name = "DATABASE_PORT", value = "5432" },
-        { name = "DATABASE_NAME", value = var.db_name },
-        { name = "DATABASE_USERNAME", value = var.db_username },
-        { name = "DATABASE_PASSWORD", value = var.db_password },
-        { name = "DATABASE_SSL", value = "false" },
-
-  # Strapi core
+        # Strapi core
         { name = "HOST", value = "0.0.0.0" },
         { name = "PORT", value = "1337" },
 

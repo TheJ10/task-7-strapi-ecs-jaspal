@@ -6,9 +6,5 @@ module "ecs_jaspal_task7" {
   execution_role_arn = var.execution_role_arn
   subnet_ids          = var.subnet_ids
 
-  db_host     = var.db_host
-  db_name     = var.db_name
-  db_username = var.db_username
-  db_password = var.db_password
 
 }

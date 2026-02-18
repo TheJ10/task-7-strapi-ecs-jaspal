@@ -17,9 +17,4 @@ variable "subnet_ids" {
   description = "Subnets for ECS service"
 }
 
-# RDS PostgreSQL
-variable "db_host" {}
-variable "db_name" {}
-variable "db_username" {}
-variable "db_password" {}
 
