@@ -42,24 +42,8 @@ resource "aws_ecs_task_definition" "jaspal_task7_task" {
     }
   ])
 }
-
-# ECS Service
-resource "aws_ecs_service" "jaspal_task7_service" {
-  name            = "jaspal-task7-strapi-service"
-  cluster         = aws_ecs_cluster.jaspal_task7_cluster.id
-  task_definition = aws_ecs_task_definition.jaspal_task7_task.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-
-  network_configuration {
-    subnets          = var.subnet_ids
-    assign_public_ip = true
-  }
-
-  force_new_deployment = true
-
-  lifecycle {
-  ignore_changes = [task_definition]
-  }
-
+data "aws_ecs_service" "jaspal_task7_service" {
+  cluster_arn = aws_ecs_cluster.jaspal_task7_cluster.arn
+  service_name = "jaspal-task7-strapi-service"
 }
+
