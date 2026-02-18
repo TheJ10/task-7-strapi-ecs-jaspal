@@ -1,17 +1,14 @@
-# ECS CLUSTER
 resource "aws_ecs_cluster" "jaspal_task7_cluster" {
   name = "jaspal-task7-strapi-cluster"
 }
 
-# ECS TASK DEFINITION
 resource "aws_ecs_task_definition" "jaspal_task7_task" {
   family                   = "jaspal-task7-strapi-task"
-  requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
   cpu                      = "512"
   memory                   = "1024"
-
-  execution_role_arn = var.execution_role_arn
+  execution_role_arn       = var.execution_role_arn
 
   container_definitions = jsonencode([
     {
@@ -26,7 +23,6 @@ resource "aws_ecs_task_definition" "jaspal_task7_task" {
       ]
 
       environment = [
-        # Strapi core
         { name = "HOST", value = "0.0.0.0" },
         { name = "PORT", value = "1337" },
 
@@ -38,12 +34,19 @@ resource "aws_ecs_task_definition" "jaspal_task7_task" {
         { name = "DATABASE_PASSWORD", value = var.db_password },
         { name = "DATABASE_SSL", value = "false" }
       ]
-
     }
   ])
 }
-data "aws_ecs_service" "jaspal_task7_service" {
-  cluster_arn = aws_ecs_cluster.jaspal_task7_cluster.arn
-  service_name = "jaspal-task7-strapi-service"
-}
 
+resource "aws_ecs_service" "jaspal_task7_service" {
+  name            = "jaspal-task7-strapi-service"
+  cluster         = aws_ecs_cluster.jaspal_task7_cluster.id
+  task_definition = aws_ecs_task_definition.jaspal_task7_task.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.subnet_ids
+    assign_public_ip = true
+  }
+}
