@@ -57,4 +57,9 @@ resource "aws_ecs_service" "jaspal_task7_service" {
   }
 
   force_new_deployment = true
+
+  lifecycle {
+  ignore_changes = [task_definition]
+  }
+
 }
