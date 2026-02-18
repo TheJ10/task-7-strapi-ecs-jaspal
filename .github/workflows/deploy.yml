@@ -36,4 +36,4 @@ jobs:
           -var="image_tag=${{ github.event.inputs.image_tag }}" \
           -var="dockerhub_repo=${{ secrets.DOCKERHUB_REPO }}" \
           -var="execution_role_arn=${{ secrets.ECS_EXECUTION_ROLE_ARN }}" \
-          -var="subnet_ids=[${{ secrets.SUBNET_IDS }}]" \
+          -var='subnet_ids=[${{ secrets.SUBNET_IDS }}]' \
