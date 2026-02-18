@@ -1,6 +1,5 @@
-resource "aws_db_subnet_group" "jaspal_task7_db_subnet_group" {
-  name       = "jaspal-task7-db-subnet-group"
-  subnet_ids = var.subnet_ids
+data "aws_db_subnet_group" "jaspal_task7_db_subnet_group" {
+  name = "jaspal-task7-db-subnet-group"
 }
 
 resource "aws_db_instance" "jaspal_task7_db" {
@@ -18,5 +17,6 @@ resource "aws_db_instance" "jaspal_task7_db" {
   skip_final_snapshot     = true
   deletion_protection     = false
 
-  db_subnet_group_name    = aws_db_subnet_group.jaspal_task7_db_subnet_group.name
+  db_subnet_group_name = data.aws_db_subnet_group.jaspal_task7_db_subnet_group.name
+
 }
