@@ -1,3 +1,62 @@
-resource "aws_ecs_cluster" "this" {
-  name = "jaspal-strapi-cluster"
+# ECS CLUSTER
+resource "aws_ecs_cluster" "jaspal_task7_cluster" {
+  name = "jaspal-task7-strapi-cluster"
+}
+
+# ECS TASK DEFINITION
+resource "aws_ecs_task_definition" "jaspal_task7_task" {
+  family                   = "jaspal-task7-strapi-task"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = "512"
+  memory                   = "1024"
+
+  execution_role_arn = var.execution_role_arn
+
+  container_definitions = jsonencode([
+    {
+      name  = "jaspal-task7-strapi-container"
+      image = "${var.dockerhub_repo}:${var.image_tag}"
+
+      portMappings = [
+        {
+          containerPort = 1337
+          protocol      = "tcp"
+        }
+      ]
+
+      environment = [
+  # Database
+        { name = "DATABASE_CLIENT", value = "postgres" },
+        { name = "DATABASE_HOST", value = var.db_host },
+        { name = "DATABASE_PORT", value = "5432" },
+        { name = "DATABASE_NAME", value = var.db_name },
+        { name = "DATABASE_USERNAME", value = var.db_username },
+        { name = "DATABASE_PASSWORD", value = var.db_password },
+        { name = "DATABASE_SSL", value = "false" },
+
+  # Strapi core
+        { name = "HOST", value = "0.0.0.0" },
+        { name = "PORT", value = "1337" },
+
+      ]
+
+    }
+  ])
+}
+
+# ECS Service
+resource "aws_ecs_service" "jaspal_task7_service" {
+  name            = "jaspal-task7-strapi-service"
+  cluster         = aws_ecs_cluster.jaspal_task7_cluster.id
+  task_definition = aws_ecs_task_definition.jaspal_task7_task.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.subnet_ids
+    assign_public_ip = true
+  }
+
+  force_new_deployment = true
 }
