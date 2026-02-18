@@ -2,7 +2,7 @@
 
 
 ## Project Overview
-This project demonstrates deploying a Strapi application on AWS ECS using Infrastructure as Code (Terraform) and CI/CD automation with GitHub Actions.
+This project demonstrates deploying a **Strapi application** on **AWS ECS Fargate** using **Infrastructure as Code (Terraform)** and **CI/CD automation with GitHub Actions**.
 
 The goal of Task-7 was to:
 - Containerize a Strapi application
@@ -20,13 +20,13 @@ GitHub Actions (CI/CD)
    ↓
 Docker Image Build
    ↓
-Container Registry (ECR / Docker Hub)
+Docker Hub
    ↓
 Terraform Apply
    ↓
 AWS ECS Cluster
    ↓
-ECS Task Definition
+ECS Task Definition & Service
 ```
 
 ---
@@ -36,89 +36,86 @@ ECS Task Definition
 - Docker
 - GitHub Actions (CI/CD)
 - Terraform (Infrastructure as Code)
-- AWS ECS
-- AWS EC2 / Fargate
-- AWS VPC & Security Groups
+- AWS ECS Fargate
+- AWS Default VPC & Subnets
 
 ---
 
 ## Repository Structure
 ```text
 .
-├── strapi/                    # Strapi application source
-│   ├── Dockerfile
-│   ├── package.json
-│   └── config/
+├── strapi/ # Strapi application source
+│ ├── Dockerfile
+│ ├── package.json
+│ └── config/
 │
 ├── terraform/
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-│   ├── providers.tf
-│   └── modules/
-│       ├── ecs/
-│       ├── vpc/
-│       └── rds/
+│ ├── main.tf
+│ ├── variables.tf
+│ ├── providers.tf
+│ └── modules/
+│ ├── ecs/
+│ └── rds/
 │
 └── .github/
-    └── workflows/
-        └── deploy.yml
+└── workflows/
+├── ci.yml
+└── deploy.yml
 ```
 
 ---
 
 ## CI/CD Workflow (GitHub Actions)
 The GitHub Actions pipeline performs the following steps:
-1. Checkout repository code
-2. Build Docker image for Strapi
-3. Push the image to a container registry
-4. Run Terraform to provision/update AWS infrastructure
-5. Create ECS cluster and task definition
+- Checkout source code
+- Build Docker image for Strapi
+- Tag image using commit SHA
+- Push image to Docker Hub
+- Run Terraform to provision/update AWS infrastructure
+- Deploy ECS cluster, task definition, and service
 
-The workflow ensures infrastructure and application deployment are automated.
+All infrastructure provisioning and deployment is automated using GitHub Actions.
 
 ---
 
 ## Infrastructure Provisioned via Terraform
 - ECS Cluster
+- ECS Cluster
 - ECS Task Definition
-- Networking (VPC & subnets – reused default VPC)
-- Security Groups
-- Supporting Terraform modules for clean structure
-Terraform was used in a modular approach for clarity and maintainability.
-
-## Achievements / What Worked Successfully
-
-- Strapi application successfully containerized
-
--  Docker image build automated via GitHub Actions
-
-- CI/CD pipeline executed infrastructure provisioning
--  Real-world ECS deployment flow implemented
+- ECS Service (Fargate)
+- Networking using default VPC and subnets
+- Modular Terraform structure for maintainability
 
 ---
 
-## Limitation Encountered 
-During deployment, the ECS task failed to pull the container image due to restricted IAM permissions in the provided AWS account.
+## Achievements
+- Successfully containerized Strapi application
+- Automated Docker image build and push using CI
+- Implemented CI/CD-driven infrastructure provisioning
+- Deployed application on AWS ECS Fargate using Terraform
+- Applied real-world Terraform modular design
 
-### Key limitation:
-- IAM roles and policies (ECR access, task execution role permissions) could not be modified
-- ECS requires ecr:GetAuthorizationToken or equivalent permissions to pull images from private ECR
-- Repository policies and IAM role updates were restricted
+---
 
-### Result:
-- ECS cluster and task definitions were created
-- Runtime container pull was blocked due to account-level permission restrictions
+## Limitations / Constraints
+- Deployment was performed in a **shared AWS account** with limited IAM permissions
+- Existing AWS resources caused idempotency conflicts during Terraform runs
+- These were handled by reusing existing resources via Terraform data sources
+- Application accessibility was not the primary requirement of Task-7
 
 ---
 
 ## Conclusion
 This project successfully demonstrates:
-- Infrastructure as Code with Terraform
-- CI/CD automation using GitHub Actions
-- Containerized Strapi deployment design for AWS ECS
+- Infrastructure as Code using Terraform
+- CI/CD automation with GitHub Actions
+- Containerized Strapi deployment on AWS ECS Fargate
+- Handling real-world constraints such as shared cloud environments
 
 ---
 
 ## Author
-Jaspal Gundla 
+**Jaspal Gundla**
+
+
+
