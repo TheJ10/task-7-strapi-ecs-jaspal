@@ -17,4 +17,7 @@ variable "subnet_ids" {
   description = "Subnets for ECS service"
 }
 
+variable "db_name" {}
+variable "db_username" {}
+variable "db_password" {}
 
